@@ -1,0 +1,16 @@
+{
+  "name": "chemforth",
+  "version": "0.1.0",
+  "description": "A Forth-to-ChemFuck compiler",
+  "main": "lib/main.ts",
+  "scripts": {
+    "test": "npx jest"
+  },
+  "author": "Daniel Raloff",
+  "license": "GPL-3.0+",
+  "devDependencies": {
+    "@types/jest": "^26.0.14",
+    "jest": "^26.5.2",
+    "ts-jest": "^26.4.1"
+  }
+}
