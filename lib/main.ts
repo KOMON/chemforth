@@ -48,21 +48,50 @@ function main() {
         ];
     }
 
-    function eq(): Instruction[] {
-        //!(x > y || x < y)
-        // x y
-        // over over lt < gt > or not
+    function eq() {
+        // x = y
+        // !(x < y) && !(x > y)
+    }
 
-        // <[->-<]+>[[-]<-]
-        return [
-            ...over(),
-            ...over(),
-            ...lt(),
+    function gteq(): Instruction[] {
+        //<[- >- <]+>[<->[-]]<
+         return [
             Instruction.DEC_P,
-            ...gt(),
-            // Instruction.INC_P,
-            // ...or(),
-            // ...not()
+            Instruction.LOOP_START,
+            Instruction.DEC,
+            Instruction.INC_P, Instruction.DEC,
+            Instruction.DEC_P,
+            Instruction.LOOP_END,
+            Instruction.INC,
+            Instruction.INC_P,
+            Instruction.LOOP_START,
+            Instruction.DEC_P, Instruction.DEC,
+            Instruction.INC_P, ...decToZero(),
+            Instruction.LOOP_END
+        ];
+    }
+
+    function lteq(): Instruction[] {
+        //[-<->]+<[>-<[-]]>[-<+>]<
+        return [
+            Instruction.LOOP_START,
+            Instruction.DEC,
+            Instruction.DEC_P, Instruction.DEC,
+            Instruction.INC_P,
+            Instruction.LOOP_END,
+            Instruction.INC,
+            Instruction.DEC_P,
+            Instruction.LOOP_START,
+            Instruction.INC_P, Instruction.DEC,
+            Instruction.DEC_P, ...decToZero(),
+            Instruction.LOOP_END,
+            Instruction.INC_P,
+            Instruction.LOOP_START,
+            Instruction.DEC,
+            Instruction.DEC_P, Instruction.INC,
+            Instruction.INC_P,
+            Instruction.LOOP_END,
+            Instruction.DEC_P
         ];
     }
 
@@ -113,17 +142,16 @@ function main() {
     }
 
     function and(): Instruction[] {
-        // if (x) {
-        //   if (y) {
-        //      x +
+        // if (y) {
+        //   if (x) {
+        //      +
         //   } else {
         //      x
         //   }
         // } else {
-        //    y[-]
-        //    x
+        //    [-]
+        //    x[-]+
         // }
-        
         return [
             Instruction.DEC_P,
             ...if_bf(
@@ -181,8 +209,8 @@ function main() {
         // x y sub 0= !
         return [
             ...subtract(),
-            // ...eqZero(),
-            // ...not()
+            ...eqZero(),
+            ...not()
         ];
     }
 
